@@ -67,6 +67,7 @@ python cerca.py "search_term" -n
 | `-r, --replace` | Mostra preview di sostituzione (non modifica i file) |
 | `--include-binary` | Includi file binari nella ricerca |
 | `-w, --workers` | Numero di thread paralleli (default: 8) |
+| `--editor` | Specifica l'editor da usare (default: uedit64 o variabile EDITOR) |
 
 ## 🔧 Configurazione
 
@@ -98,6 +99,19 @@ python cerca.py "import" -e .py -n
 python cerca.py "vecchia_funzione" -r "nuova_funzione" -e .py
 ```
 
+### Usare editor diversi
+```bash
+# Usa VS Code
+python cerca.py "TODO" --editor code
+
+# Usa Vim
+python cerca.py "TODO" --editor vim
+
+# Imposta editor di default tramite variabile d'ambiente
+export EDITOR=nano
+python cerca.py "TODO"
+```
+
 ## ⚙️ Funzionalità avanzate
 
 ### Filtro interattivo per estensioni
@@ -106,8 +120,13 @@ Dopo la ricerca iniziale, il programma mostra un riepilogo delle estensioni trov
 ### Ricerca parallela
 Utilizza un pool di thread (default: 8) per cercare simultaneamente in più file, migliorando notevolmente le prestazioni su progetti grandi.
 
-### Integrazione con UEEdit64
-Se hai UEEdit64 installato, il programma può aprire automaticamente tutti i file trovati nell'editor. Puoi limitare il numero di file aperti con l'opzione `-l`.
+### Integrazione con editor
+Il programma può aprire automaticamente i file trovati nel tuo editor preferito. Di default, usa:
+1. L'editor specificato con l'opzione `--editor`
+2. La variabile d'ambiente `EDITOR` (se impostata)
+3. `uedit64` come fallback
+
+Puoi limitare il numero di file aperti con l'opzione `-l`.
 
 ## 📝 Note
 

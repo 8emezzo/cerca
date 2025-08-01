@@ -69,6 +69,7 @@ python cerca.py "search_term" -n
 | `-r, --replace` | Show replacement preview (doesn't modify files) |
 | `--include-binary` | Include binary files in search |
 | `-w, --workers` | Number of parallel threads (default: 8) |
+| `--editor` | Specify the editor to use (default: uedit64 or EDITOR env var) |
 
 ## 🔧 Configuration
 
@@ -100,6 +101,19 @@ python cerca.py "import" -e .py -n
 python cerca.py "old_function" -r "new_function" -e .py
 ```
 
+### Use different editors
+```bash
+# Use VS Code
+python cerca.py "TODO" --editor code
+
+# Use Vim
+python cerca.py "TODO" --editor vim
+
+# Set default editor via environment variable
+export EDITOR=nano
+python cerca.py "TODO"
+```
+
 ## ⚙️ Advanced Features
 
 ### Interactive extension filtering
@@ -108,8 +122,13 @@ After the initial search, the program shows a summary of found extensions and al
 ### Parallel search
 Uses a thread pool (default: 8) to search simultaneously in multiple files, significantly improving performance on large projects.
 
-### UEEdit64 integration
-If you have UEEdit64 installed, the program can automatically open all found files in the editor. You can limit the number of opened files with the `-l` option.
+### Editor integration
+The program can automatically open found files in your preferred editor. By default, it uses:
+1. The editor specified with `--editor` option
+2. The `EDITOR` environment variable (if set)
+3. `uedit64` as fallback
+
+You can limit the number of opened files with the `-l` option.
 
 ## 📝 Notes
 

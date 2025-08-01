@@ -216,7 +216,7 @@ def filter_by_extensions(results):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Cerca stringhe nei file e apre con UEEdit64',
+        description='Cerca stringhe nei file e apre con l\'editor specificato',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='''
 ESEMPI:
@@ -225,6 +225,7 @@ ESEMPI:
   cerca.py "import pandas" -e .py   Cerca solo in file Python
   cerca.py "error" -c               Mostra contesto delle occorrenze
   cerca.py "bug" -r "fix"           Sostituisci "bug" con "fix" (preview)
+  cerca.py "TODO" --editor code     Apre i file con VS Code
         ''')
     
     parser.add_argument('pattern', help='Stringa da cercare')
@@ -244,6 +245,8 @@ ESEMPI:
                        help='Includi file binari nella ricerca')
     parser.add_argument('-w', '--workers', type=int, default=8,
                        help='Numero di thread paralleli (default: 8)')
+    parser.add_argument('--editor', type=str, default=None,
+                       help='Editor da usare per aprire i file (default: uedit64 o EDITOR env var)')
     
     args = parser.parse_args()
     
@@ -289,8 +292,14 @@ ESEMPI:
     if args.no_open:
         return
     
+    # Determina quale editor usare
+    editor = args.editor
+    if not editor:
+        # Prova a prendere dalla variabile d'ambiente EDITOR
+        editor = os.environ.get('EDITOR', 'uedit64')
+    
     # Chiedi conferma apertura (usa i risultati filtrati)
-    risposta = input("\nVuoi aprire tutti i file con UEEdit64? (S/N) [Enter=S]: ").strip().upper()
+    risposta = input(f"\nVuoi aprire tutti i file con {editor}? (S/N) [Enter=S]: ").strip().upper()
 
     
     if risposta in ['S', '']:  # Accetta sia 'S' che invio vuoto
@@ -301,11 +310,11 @@ ESEMPI:
         
         for filepath, _ in files_to_open:
             try:
-                subprocess.Popen(['uedit64', filepath], 
+                subprocess.Popen([editor, filepath], 
                                stdout=subprocess.DEVNULL, 
                                stderr=subprocess.DEVNULL)
             except FileNotFoundError:
-                print(f"Errore: uedit64 non trovato nel PATH")
+                print(f"Errore: {editor} non trovato nel PATH")
                 break
     else:
         print("Operazione annullata")
