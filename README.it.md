@@ -1,9 +1,10 @@
 # 🔍 Cerca
 
-**Cerca** è uno strumento Python per la ricerca veloce di stringhe all'interno di file, con supporto per ricerca parallela e integrazione con editor di testo.
+**Cerca** è uno strumento Python per la ricerca veloce di stringhe all'interno di file, con supporto per ricerca parallela e integrazione con editor di testo. Effettua una ricerca ricorsiva in tutti i file e sottocartelle a partire dalla directory corrente.
 
 ## ✨ Caratteristiche
 
+- 🔍 **Ricerca ricorsiva** - Cerca in tutti i file e sottocartelle dalla directory di lavoro corrente
 - 🚀 **Ricerca parallela** - Utilizza più thread per cercare simultaneamente in molti file
 - 🎯 **Ricerca case-sensitive o insensitive** - Scegli come cercare
 - 📁 **Filtro per estensioni** - Cerca solo nei tipi di file che ti interessano
@@ -12,7 +13,7 @@
 - 🔄 **Preview sostituzioni** - Anteprima delle modifiche senza modificare i file
 - 📊 **Statistiche dettagliate** - Numero di occorrenze per file e dimensioni
 - 🎛️ **Filtro interattivo** - Escludi estensioni dopo la ricerca
-- ⚡ **Integrazione con UEEdit64** - Apre automaticamente i file trovati nell'editor
+- ⚡ **Integrazione con editor** - Apre automaticamente i file trovati nel tuo editor preferito
 
 ## 📦 Installazione
 
@@ -28,6 +29,7 @@ Assicurati di avere Python 3.6+ installato.
 ### Ricerca base
 ```bash
 python cerca.py "TODO"
+# Cerca "TODO" in tutti i file e sottocartelle dalla directory corrente
 ```
 
 ### Ricerca case-insensitive

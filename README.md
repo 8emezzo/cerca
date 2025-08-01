@@ -1,11 +1,12 @@
 # 🔍 Cerca
 
-**Cerca** is a fast Python tool for searching strings within files, with parallel search support and text editor integration.
+**Cerca** is a fast Python tool for searching strings within files, with parallel search support and text editor integration. It recursively searches through all files and subdirectories starting from the current directory.
 
 > 🇮🇹 [Versione italiana](README.it.md)
 
 ## ✨ Features
 
+- 🔍 **Recursive search** - Searches through all files and subdirectories from the current working directory
 - 🚀 **Parallel search** - Uses multiple threads to search simultaneously across many files
 - 🎯 **Case-sensitive or insensitive search** - Choose your search mode
 - 📁 **Extension filtering** - Search only in file types you care about
@@ -14,7 +15,7 @@
 - 🔄 **Replacement preview** - Preview changes without modifying files
 - 📊 **Detailed statistics** - Number of occurrences per file and file sizes
 - 🎛️ **Interactive filtering** - Exclude extensions after the search
-- ⚡ **UEEdit64 integration** - Automatically opens found files in the editor
+- ⚡ **Editor integration** - Automatically opens found files in your preferred editor
 
 ## 📦 Installation
 
@@ -30,6 +31,7 @@ Make sure you have Python 3.6+ installed.
 ### Basic search
 ```bash
 python cerca.py "TODO"
+# Searches for "TODO" in all files and subdirectories from current directory
 ```
 
 ### Case-insensitive search
