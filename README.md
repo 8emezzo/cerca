@@ -1,125 +1,127 @@
 # 🔍 Cerca
 
-**Cerca** è uno strumento Python per la ricerca veloce di stringhe all'interno di file, con supporto per ricerca parallela e integrazione con editor di testo.
+**Cerca** is a fast Python tool for searching strings within files, with parallel search support and text editor integration.
 
-## ✨ Caratteristiche
+> 🇮🇹 [Versione italiana](README.it.md)
 
-- 🚀 **Ricerca parallela** - Utilizza più thread per cercare simultaneamente in molti file
-- 🎯 **Ricerca case-sensitive o insensitive** - Scegli come cercare
-- 📁 **Filtro per estensioni** - Cerca solo nei tipi di file che ti interessano
-- 🚫 **Esclusione automatica** - Ignora file binari e cartelle di sistema (.git, node_modules, ecc.)
-- 📝 **Mostra contesto** - Visualizza le righe dove appare il testo cercato
-- 🔄 **Preview sostituzioni** - Anteprima delle modifiche senza modificare i file
-- 📊 **Statistiche dettagliate** - Numero di occorrenze per file e dimensioni
-- 🎛️ **Filtro interattivo** - Escludi estensioni dopo la ricerca
-- ⚡ **Integrazione con UEEdit64** - Apre automaticamente i file trovati nell'editor
+## ✨ Features
 
-## 📦 Installazione
+- 🚀 **Parallel search** - Uses multiple threads to search simultaneously across many files
+- 🎯 **Case-sensitive or insensitive search** - Choose your search mode
+- 📁 **Extension filtering** - Search only in file types you care about
+- 🚫 **Automatic exclusion** - Ignores binary files and system folders (.git, node_modules, etc.)
+- 📝 **Show context** - Display lines where the searched text appears
+- 🔄 **Replacement preview** - Preview changes without modifying files
+- 📊 **Detailed statistics** - Number of occurrences per file and file sizes
+- 🎛️ **Interactive filtering** - Exclude extensions after the search
+- ⚡ **UEEdit64 integration** - Automatically opens found files in the editor
+
+## 📦 Installation
 
 ```bash
 git clone https://github.com/8emezzo/cerca.git
 cd cerca
 ```
 
-Assicurati di avere Python 3.6+ installato.
+Make sure you have Python 3.6+ installed.
 
-## 🚀 Utilizzo
+## 🚀 Usage
 
-### Ricerca base
+### Basic search
 ```bash
 python cerca.py "TODO"
 ```
 
-### Ricerca case-insensitive
+### Case-insensitive search
 ```bash
 python cerca.py "todo" -i
 ```
 
-### Cerca solo in file Python
+### Search only in Python files
 ```bash
 python cerca.py "import pandas" -e .py
 ```
 
-### Mostra il contesto delle occorrenze
+### Show occurrence context
 ```bash
 python cerca.py "error" -c
 ```
 
-### Preview di sostituzione
+### Replacement preview
 ```bash
 python cerca.py "bug" -r "fix"
 ```
 
-### Solo mostra risultati (non aprire editor)
+### Show results only (don't open editor)
 ```bash
 python cerca.py "search_term" -n
 ```
 
-## 🎯 Opzioni
+## 🎯 Options
 
-| Opzione | Descrizione |
-|---------|-------------|
-| `-i, --ignore-case` | Ricerca case-insensitive |
-| `-e, --extensions` | Estensioni file da includere (es: .py .txt) |
-| `-n, --no-open` | Non aprire i file, mostra solo i risultati |
-| `-l, --limit` | Limita il numero di file da aprire |
-| `-c, --context` | Mostra il contesto delle occorrenze |
-| `-r, --replace` | Mostra preview di sostituzione (non modifica i file) |
-| `--include-binary` | Includi file binari nella ricerca |
-| `-w, --workers` | Numero di thread paralleli (default: 8) |
+| Option | Description |
+|--------|-------------|
+| `-i, --ignore-case` | Case-insensitive search |
+| `-e, --extensions` | File extensions to include (e.g.: .py .txt) |
+| `-n, --no-open` | Don't open files, show results only |
+| `-l, --limit` | Limit the number of files to open |
+| `-c, --context` | Show occurrence context |
+| `-r, --replace` | Show replacement preview (doesn't modify files) |
+| `--include-binary` | Include binary files in search |
+| `-w, --workers` | Number of parallel threads (default: 8) |
 
-## 🔧 Configurazione
+## 🔧 Configuration
 
-Il programma esclude automaticamente:
+The program automatically excludes:
 
-**Directory**: `.git`, `.svn`, `__pycache__`, `node_modules`, `.venv`, `venv`, `env`, `.idea`, `.vscode`, `build`, `dist`
+**Directories**: `.git`, `.svn`, `__pycache__`, `node_modules`, `.venv`, `venv`, `env`, `.idea`, `.vscode`, `build`, `dist`
 
-**File binari**: `.exe`, `.dll`, `.so`, `.pdf`, `.jpg`, `.png`, `.zip`, `.mp3`, `.mp4`, ecc.
+**Binary files**: `.exe`, `.dll`, `.so`, `.pdf`, `.jpg`, `.png`, `.zip`, `.mp3`, `.mp4`, etc.
 
-## 💡 Esempi d'uso
+## 💡 Usage Examples
 
-### Trovare tutti i TODO nel codice
+### Find all TODOs in code
 ```bash
 python cerca.py "TODO" -e .py .js .java -c
 ```
 
-### Cercare errori nei log
+### Search for errors in logs
 ```bash
 python cerca.py "ERROR" -i -e .log -c
 ```
 
-### Verificare import non utilizzati
+### Check unused imports
 ```bash
 python cerca.py "import" -e .py -n
 ```
 
-### Cercare e preparare una sostituzione
+### Search and prepare a replacement
 ```bash
-python cerca.py "vecchia_funzione" -r "nuova_funzione" -e .py
+python cerca.py "old_function" -r "new_function" -e .py
 ```
 
-## ⚙️ Funzionalità avanzate
+## ⚙️ Advanced Features
 
-### Filtro interattivo per estensioni
-Dopo la ricerca iniziale, il programma mostra un riepilogo delle estensioni trovate e permette di escluderne alcune interattivamente.
+### Interactive extension filtering
+After the initial search, the program shows a summary of found extensions and allows you to exclude some interactively.
 
-### Ricerca parallela
-Utilizza un pool di thread (default: 8) per cercare simultaneamente in più file, migliorando notevolmente le prestazioni su progetti grandi.
+### Parallel search
+Uses a thread pool (default: 8) to search simultaneously in multiple files, significantly improving performance on large projects.
 
-### Integrazione con UEEdit64
-Se hai UEEdit64 installato, il programma può aprire automaticamente tutti i file trovati nell'editor. Puoi limitare il numero di file aperti con l'opzione `-l`.
+### UEEdit64 integration
+If you have UEEdit64 installed, the program can automatically open all found files in the editor. You can limit the number of opened files with the `-l` option.
 
-## 📝 Note
+## 📝 Notes
 
-- La ricerca utilizza espressioni regolari con escape automatico del pattern
-- I file vengono ordinati per numero di occorrenze (decrescente)
-- Il contesto mostra fino a 3 occorrenze per file
-- Le righe lunghe vengono troncate per una migliore leggibilità
+- Search uses regular expressions with automatic pattern escaping
+- Files are sorted by number of occurrences (descending)
+- Context shows up to 3 occurrences per file
+- Long lines are truncated for better readability
 
-## 🤝 Contributi
+## 🤝 Contributing
 
-I contributi sono benvenuti! Sentiti libero di aprire issue o pull request.
+Contributions are welcome! Feel free to open issues or pull requests.
 
-## 📄 Licenza
+## 📄 License
 
-Questo progetto è distribuito sotto licenza MIT.
+This project is distributed under the MIT License.
