@@ -119,7 +119,7 @@ python cerca.py "TODO"
 ## ⚙️ Advanced Features
 
 ### Interactive extension filtering
-After the initial search, the program shows a summary of found extensions and allows you to exclude some interactively.
+After the initial search, the program shows a summary of found extensions and allows you to exclude some interactively. When prompted, answer 'Y' to exclude extensions or 'N' (or press Enter) to keep all results.
 
 ### Parallel search
 Uses a thread pool (default: 8) to search simultaneously in multiple files, significantly improving performance on large projects.
@@ -129,6 +129,8 @@ The program can automatically open found files in your preferred editor. By defa
 1. The editor specified with `--editor` option
 2. The `EDITOR` environment variable (if set)
 3. `uedit64` as fallback
+
+When prompted to open files, answer 'Y' (or press Enter) to confirm or 'N' to cancel.
 
 You can limit the number of opened files with the `-l` option.
 

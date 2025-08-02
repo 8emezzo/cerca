@@ -9,18 +9,18 @@ from collections import defaultdict, Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
 
-# File binari comuni da escludere
+# Common binary files to exclude
 BINARY_EXTENSIONS = {'.exe', '.dll', '.so', '.dylib', '.pdf', '.jpg', '.jpeg', 
                     '.png', '.gif', '.ico', '.zip', '.rar', '.7z', '.tar', 
                     '.gz', '.bz2', '.mp3', '.mp4', '.avi', '.mov', '.mkv',
                     '.pyc', '.pyo', '.class', '.o', '.obj', '.lib'}
 
-# Directory da escludere
+# Directories to exclude
 EXCLUDE_DIRS = {'.git', '.svn', '__pycache__', 'node_modules', '.venv', 
                 'venv', 'env', '.idea', '.vscode', 'build', 'dist'}
 
 def is_binary_file(filepath):
-    """Controlla se un file è binario."""
+    """Check if a file is binary."""
     try:
         with open(filepath, 'rb') as f:
             chunk = f.read(1024)
@@ -29,7 +29,7 @@ def is_binary_file(filepath):
         return True
 
 def search_in_file(filepath, pattern, case_sensitive, show_context=False):
-    """Cerca in un singolo file e ritorna risultati dettagliati."""
+    """Search in a single file and return detailed results."""
     try:
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read()
@@ -73,7 +73,7 @@ def search_in_file(filepath, pattern, case_sensitive, show_context=False):
 
 def search_files_parallel(pattern, case_sensitive=True, extensions=None, 
                          exclude_binary=True, show_context=False, max_workers=8):
-    """Cerca pattern in parallelo."""
+    """Search pattern in parallel."""
     files_to_search = []
     current_dir = Path.cwd()
     
@@ -104,7 +104,7 @@ def search_files_parallel(pattern, case_sensitive=True, extensions=None,
         
         for future in as_completed(future_to_file):
             completed += 1
-            print(f"\rAnalizzati {completed}/{total} file...", end='', flush=True)
+            print(f"\rAnalyzed {completed}/{total} files...", end='', flush=True)
             
             result = future.result()
             if result:
@@ -114,15 +114,15 @@ def search_files_parallel(pattern, case_sensitive=True, extensions=None,
     return results
 
 def format_size(size):
-    """Formatta dimensione file."""
+    """Format file size."""
     for unit in ['B', 'KB', 'MB', 'GB']:
         if size < 1024:
             return f"{size:.1f}{unit}"
         size /= 1024
     return f"{size:.1f}TB"
 
-def print_results(results, args, header="File trovati:"):
-    """Stampa i risultati."""
+def print_results(results, args, header="Files found:"):
+    """Print results."""
     sorted_results = sorted(results.items(), key=lambda x: x[1]['count'], reverse=True)
     
     print(f"\n{header}\n")
@@ -134,9 +134,9 @@ def print_results(results, args, header="File trovati:"):
         
         try:
             file_size = format_size(Path(filepath).stat().st_size)
-            print(f"{i:3d}. {filepath} ({count} occorrenz{'a' if count == 1 else 'e'}, {file_size})")
+            print(f"{i:3d}. {filepath} ({count} occurrence{'s' if count != 1 else ''}, {file_size})")
         except:
-            print(f"{i:3d}. {filepath} ({count} occorrenz{'a' if count == 1 else 'e'})")
+            print(f"{i:3d}. {filepath} ({count} occurrence{'s' if count != 1 else ''})")
         
         if args.context and data['contexts']:
             for line_num, line_content in data['contexts']:
@@ -150,47 +150,47 @@ def print_results(results, args, header="File trovati:"):
                         )
                     else:
                         highlighted = line_content.replace(args.pattern, f"[{args.pattern} → {args.replace}]")
-                    print(f"     Riga {line_num}: {highlighted}")
+                    print(f"     Line {line_num}: {highlighted}")
                 else:
-                    print(f"     Riga {line_num}: {line_content}")
+                    print(f"     Line {line_num}: {line_content}")
             print()
     
     return sorted_results, total_occurrences
 
 def filter_by_extensions(results):
-    """Permette di filtrare i risultati per estensione."""
-    # Conta le estensioni
+    """Allows filtering results by extension."""
+    # Count extensions
     ext_counter = Counter()
     for data in results.values():
         ext = data.get('extension', '')
         if not ext:
-            ext = '(senza estensione)'
+            ext = '(no extension)'
         ext_counter[ext] += 1
     
     if len(ext_counter) <= 1:
         return results
     
-    # Mostra riepilogo estensioni
-    print("\nRiepilogo estensioni trovate:")
+    # Show extensions summary
+    print("\nExtensions summary:")
     sorted_exts = sorted(ext_counter.items(), key=lambda x: x[1], reverse=True)
     for i, (ext, count) in enumerate(sorted_exts, 1):
         print(f"  {i:2d}. {ext:15s} {count:4d} file")
     
-    # Chiedi se vuole escludere
-    risposta = input("\nVuoi escludere qualche estensione? (S/N) [Entrer=N]: ").strip().upper()
-    if risposta != 'S':
+    # Ask if they want to exclude
+    risposta = input("\nDo you want to exclude any extension? (Y/N) [Enter=N]: ").strip().upper()
+    if risposta != 'Y':
         return results
     
-    # Chiedi quali escludere
-    print("\nInserisci i numeri delle estensioni da ESCLUDERE separati da spazi")
-    print("(es: '1 3 5' per escludere la 1°, 3° e 5° estensione)")
-    scelta = input("Numeri da escludere (invio per nessuna): ").strip()
+    # Ask which ones to exclude
+    print("\nEnter the numbers of extensions to EXCLUDE separated by spaces")
+    print("(e.g.: '1 3 5' to exclude the 1st, 3rd and 5th extension)")
+    scelta = input("Numbers to exclude (enter for none): ").strip()
     
     if not scelta:
         return results
     
     try:
-        # Parse numeri
+        # Parse numbers
         numeri = [int(n) for n in scelta.split()]
         escludi_ext = set()
         
@@ -200,67 +200,67 @@ def filter_by_extensions(results):
                 escludi_ext.add(ext)
         
         if escludi_ext:
-            print(f"\nEscludendo: {', '.join(escludi_ext)}")
-            # Filtra risultati
+            print(f"\nExcluding: {', '.join(escludi_ext)}")
+            # Filter results
             filtered_results = {}
             for path, data in results.items():
-                ext = data.get('extension', '') or '(senza estensione)'
+                ext = data.get('extension', '') or '(no extension)'
                 if ext not in escludi_ext:
                     filtered_results[path] = data
             return filtered_results
             
     except ValueError:
-        print("Input non valido, nessun filtro applicato")
+        print("Invalid input, no filter applied")
     
     return results
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Cerca stringhe nei file e apre con l\'editor specificato',
+        description='Search strings in files and open with specified editor',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='''
 ESEMPI:
-  cerca.py "TODO"                   Cerca "TODO" (case-sensitive)
-  cerca.py "todo" -i                Cerca "todo" ignorando maiuscole/minuscole
-  cerca.py "import pandas" -e .py   Cerca solo in file Python
-  cerca.py "error" -c               Mostra contesto delle occorrenze
-  cerca.py "bug" -r "fix"           Sostituisci "bug" con "fix" (preview)
-  cerca.py "TODO" --editor code     Apre i file con VS Code
+  cerca.py "TODO"                   Search "TODO" (case-sensitive)
+  cerca.py "todo" -i                Search "todo" ignoring case
+  cerca.py "import pandas" -e .py   Search only in Python files
+  cerca.py "error" -c               Show context of occurrences
+  cerca.py "bug" -r "fix"           Replace "bug" with "fix" (preview)
+  cerca.py "TODO" --editor code     Open files with VS Code
         ''')
     
-    parser.add_argument('pattern', help='Stringa da cercare')
+    parser.add_argument('pattern', help='String to search')
     parser.add_argument('-i', '--ignore-case', action='store_true', 
-                       help='Ricerca case-insensitive')
+                       help='Case-insensitive search')
     parser.add_argument('-e', '--extensions', nargs='+', 
-                       help='Estensioni file da includere (es: .py .txt)')
+                       help='File extensions to include (e.g.: .py .txt)')
     parser.add_argument('-n', '--no-open', action='store_true',
-                       help='Non aprire i file, mostra solo i risultati')
+                       help='Don\'t open files, only show results')
     parser.add_argument('-l', '--limit', type=int, default=0,
-                       help='Limita il numero di file da aprire')
+                       help='Limit the number of files to open')
     parser.add_argument('-c', '--context', action='store_true',
-                       help='Mostra il contesto delle occorrenze')
+                       help='Show context of occurrences')
     parser.add_argument('-r', '--replace', type=str,
-                       help='Mostra preview di sostituzione (non modifica i file)')
+                       help='Show replacement preview (doesn\'t modify files)')
     parser.add_argument('--include-binary', action='store_true',
-                       help='Includi file binari nella ricerca')
+                       help='Include binary files in search')
     parser.add_argument('-w', '--workers', type=int, default=8,
-                       help='Numero di thread paralleli (default: 8)')
+                       help='Number of parallel threads (default: 8)')
     parser.add_argument('--editor', type=str, default=None,
-                       help='Editor da usare per aprire i file (default: uedit64 o EDITOR env var)')
+                       help='Editor to use for opening files (default: uedit64 or EDITOR env var)')
     
     args = parser.parse_args()
     
     start_time = time.time()
     
-    print(f"\nRicerca {'case-insensitive' if args.ignore_case else 'case-sensitive'} di '{args.pattern}' in corso...")
+    print(f"\n{'Case-insensitive' if args.ignore_case else 'Case-sensitive'} search for '{args.pattern}' in progress...")
     print(f"Directory: {Path.cwd().absolute()}")
     
     if args.extensions:
-        print(f"Filtrando per estensioni: {', '.join(args.extensions)}")
+        print(f"Filtering by extensions: {', '.join(args.extensions)}")
     
     print()
     
-    # Cerca i file
+    # Search files
     results = search_files_parallel(
         args.pattern, 
         not args.ignore_case, 
@@ -271,42 +271,42 @@ ESEMPI:
     )
     
     if not results:
-        print(f"Nessun file trovato contenente '{args.pattern}'")
+        print(f"No files found containing '{args.pattern}'")
         return
     
-    # Prima stampa TUTTI i risultati
+    # First print ALL results
     sorted_results, total_occurrences = print_results(results, args)
     
     elapsed = time.time() - start_time
-    print(f"\nTrovati {len(results)} file con {total_occurrences} occorrenze totali in {elapsed:.2f} secondi")
+    print(f"\nFound {len(results)} files with {total_occurrences} total occurrences in {elapsed:.2f} seconds")
     
-    # Poi offri di filtrare per estensioni
+    # Then offer to filter by extensions
     filtered_results = filter_by_extensions(results)
     
-    # Se sono stati filtrati, ristampa i risultati
+    # If filtered, reprint results
     if len(filtered_results) < len(results):
         sorted_results, total_occurrences = print_results(filtered_results, args, 
-                                                         "File trovati dopo il filtro:")
-        print(f"\nRimasti {len(filtered_results)} file con {total_occurrences} occorrenze dopo il filtro")
+                                                         "Files found after filtering:")
+        print(f"\n{len(filtered_results)} files remaining with {total_occurrences} occurrences after filtering")
     
     if args.no_open:
         return
     
-    # Determina quale editor usare
+    # Determine which editor to use
     editor = args.editor
     if not editor:
-        # Prova a prendere dalla variabile d'ambiente EDITOR
+        # Try to get from EDITOR environment variable
         editor = os.environ.get('EDITOR', 'uedit64')
     
-    # Chiedi conferma apertura (usa i risultati filtrati)
-    risposta = input(f"\nVuoi aprire tutti i file con {editor}? (S/N) [Enter=S]: ").strip().upper()
+    # Ask for confirmation to open (use filtered results)
+    risposta = input(f"\nDo you want to open all files with {editor}? (Y/N) [Enter=Y]: ").strip().upper()
 
     
-    if risposta in ['S', '']:  # Accetta sia 'S' che invio vuoto
+    if risposta in ['Y', '']:  # Accept both 'Y' and empty enter
         files_to_open = sorted_results
         if args.limit > 0:
             files_to_open = files_to_open[:args.limit]
-            print(f"\nApertura dei primi {args.limit} file...")
+            print(f"\nOpening the first {args.limit} files...")
         
         for filepath, _ in files_to_open:
             try:
@@ -314,10 +314,10 @@ ESEMPI:
                                stdout=subprocess.DEVNULL, 
                                stderr=subprocess.DEVNULL)
             except FileNotFoundError:
-                print(f"Errore: {editor} non trovato nel PATH")
+                print(f"Error: {editor} not found in PATH")
                 break
     else:
-        print("Operazione annullata")
+        print("Operation cancelled")
 
 if __name__ == "__main__":
     main()
