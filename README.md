@@ -119,7 +119,7 @@ python cerca.py "TODO"
 ## ⚙️ Advanced Features
 
 ### Interactive extension filtering
-After the initial search, the program shows a summary of found extensions and allows you to exclude some interactively. When prompted, answer 'Y' to exclude extensions or 'N' (or press Enter) to keep all results.
+After the initial search, the program shows a summary of found extensions and allows you to exclude some interactively. Simply enter the numbers of the extensions you want to exclude (e.g., "1 3 5") or press Enter to keep all results.
 
 ### Parallel search
 Uses a thread pool (default: 8) to search simultaneously in multiple files, significantly improving performance on large projects.

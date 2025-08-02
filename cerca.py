@@ -176,15 +176,10 @@ def filter_by_extensions(results):
     for i, (ext, count) in enumerate(sorted_exts, 1):
         print(f"  {i:2d}. {ext:15s} {count:4d} file")
     
-    # Ask if they want to exclude
-    risposta = input("\nDo you want to exclude any extension? (Y/N) [Enter=N]: ").strip().upper()
-    if risposta != 'Y':
-        return results
-    
-    # Ask which ones to exclude
+    # Ask which extensions to exclude
     print("\nEnter the numbers of extensions to EXCLUDE separated by spaces")
     print("(e.g.: '1 3 5' to exclude the 1st, 3rd and 5th extension)")
-    scelta = input("Numbers to exclude (enter for none): ").strip()
+    scelta = input("Numbers to exclude (press Enter to skip): ").strip()
     
     if not scelta:
         return results
