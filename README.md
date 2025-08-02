@@ -2,8 +2,6 @@
 
 **Cerca** is a fast Python tool for searching strings within files, with parallel search support and text editor integration. It recursively searches through all files and subdirectories starting from the current directory.
 
-> 🇮🇹 [Versione italiana](README.it.md)
-
 ## ✨ Features
 
 - 🔍 **Recursive search** - Searches through all files and subdirectories from the current working directory
